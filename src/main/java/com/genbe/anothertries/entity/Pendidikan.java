@@ -3,7 +3,7 @@ package com.genbe.anothertries.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "pendidikan")
+@Table(name = "t_pendidikan")
 public class Pendidikan {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

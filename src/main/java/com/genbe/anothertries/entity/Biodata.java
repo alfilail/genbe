@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "biodata")
+@Table(name = "t_biodata")
 public class Biodata {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

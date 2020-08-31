@@ -10,6 +10,6 @@ import java.util.List;
 public interface PendidikanRepository extends JpaRepository<Pendidikan, Integer>{
 	List<Pendidikan> findAllByPersonIdPerson(Integer idPerson);
 	
-	@Query(value = "SELECT jenjang FROM public.pendidikan where idperson = ?1 order by tahunlulus desc limit 1", nativeQuery = true)
+	@Query(value = "SELECT jenjang FROM public.t_pendidikan where idperson = ?1 order by tahunlulus desc limit 1", nativeQuery = true)
 	String pendidikanTerakhir(Integer idPerson);
 }
