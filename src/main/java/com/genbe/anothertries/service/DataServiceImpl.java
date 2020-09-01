@@ -29,4 +29,14 @@ public class DataServiceImpl implements DataService {
 		dlDto.setUmur(Integer.toString(age.getYears()));
 		return dlDto;
 	}
+	
+	@Override
+	public DataLengkapDto getAge1(DataLengkapDto dlDto) {
+		java.sql.Date date = dlDto.getTgl();
+		LocalDate today = LocalDate.now();
+		LocalDate birth = date.toLocalDate();
+		Period age1 = Period.between(birth, today);
+		dlDto.setUmur(Integer.toString(age1.getYears()));
+		return dlDto;
+	}
 }

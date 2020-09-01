@@ -1,8 +1,5 @@
 package com.genbe.anothertries.controller;
 
-import java.time.LocalDate;
-import java.time.Period;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,13 +45,13 @@ public class ApiBiodata {
 				statusdlDto.setData(dlDto);
 				object.add(statusdlDto);
 			} else {
-				statusDto.setStatus("false");
-				statusDto.setMessage("gagal");
+				statusDto.setStatus("true");
+				statusDto.setMessage("data dengan nik "+nik+" tidak ditemukan");
 				object.add(statusDto);
 			}
 		} else {
 			statusDto.setStatus("false");
-			statusDto.setMessage("gagal");
+			statusDto.setMessage("data gagal masuk, jumlah digit nik tidak sama dengan 16");
 			object.add(statusDto);
 		}
 		return object;
@@ -75,7 +72,7 @@ public class ApiBiodata {
 			return statusDto;
 		} else if (dataDto.getNik().length()!=16 && Integer.parseInt(dlDto.getUmur()) >= 30) {
 			statusDto.setStatus("false");
-			statusDto.setMessage("data gagal masuk, jumlah digit NIK tidak sama dengan 16");
+			statusDto.setMessage("data gagal masuk, jumlah digit nik tidak sama dengan 16");
 			return statusDto;
 		} else if (dataDto.getNik().length()==16 && Integer.parseInt(dlDto.getUmur()) < 30) {
 			statusDto.setStatus("false");
@@ -83,7 +80,7 @@ public class ApiBiodata {
 			return statusDto;
 		}
 		statusDto.setStatus("false");
-		statusDto.setMessage("data gagal masuk, jumlah digit NIK tidak sama dengan 16 dan umur kurang dari 30 tahun");
+		statusDto.setMessage("data gagal masuk, jumlah digit nik tidak sama dengan 16 dan umur kurang dari 30 tahun");
 		return statusDto;
 	}
 	
@@ -94,12 +91,14 @@ public class ApiBiodata {
 			if (personRepository.findById(idPerson).isPresent()) {
 				List<Pendidikan> pendidikan = pendidikanDto.stream().map(x -> convertToPendidikan(x, idPerson)).collect(Collectors.toList());
 				pendidikanRepository.saveAll(pendidikan);
+				statusDto.setStatus("true");
+				statusDto.setMessage("data berhasil masuk");
+			} else {
+				throw new IllegalArgumentException();
 			}
-			statusDto.setStatus("true");
-			statusDto.setMessage("berhasil");
 		} catch (Exception e) {
 			statusDto.setStatus("false");
-			statusDto.setMessage("gagal");
+			statusDto.setMessage("data gagal masuk");
 		}
 		return statusDto;
 	}
@@ -112,6 +111,7 @@ public class ApiBiodata {
 		dlDto.setHp(person.getBiodata().getNoHp());
 		dlDto.setTgl(person.getBiodata().getTanggalLahir());
 		dlDto.setTempatLahir(person.getBiodata().getTempatLahir());
+		dataService.getAge1(dlDto);
 		dlDto.setPendidikanTerakhir(pendidikanRepository.pendidikanTerakhir(person.getIdPerson()));
 		return dlDto;
 	}
