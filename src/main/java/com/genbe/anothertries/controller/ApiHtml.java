@@ -23,11 +23,11 @@ public class ApiHtml {
 	
 	@GetMapping("/dashboard4")
 	public String dashboard4() {
-		return "dashboard/pbmodal";
+		return "dashboard/personbiodatamodal";
 	}
 	
 	@GetMapping("/dashboard5")
 	public String dashboard5() {
-		return "dashboard/pendmodal";
+		return "dashboard/pendidikanmodal";
 	}
 }

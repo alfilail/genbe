@@ -49,6 +49,17 @@ public class ApiBiodata {
 		return dto;
 	}
 	
+	@GetMapping("/pendidikan/{idPerson}")
+	public List<PendidikanDto> getpendidikan(@PathVariable Integer idPerson) {
+		if(personRepository.findById(idPerson).isPresent()) {
+			List<Pendidikan> p = pendidikanRepository.findAllByPersonIdPerson(idPerson);
+			List<PendidikanDto> dto = p.stream().map(this::convertToPendidikanDto).collect(Collectors.toList());
+			return dto;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
 	@GetMapping("/{id}")
 	public DataDto getDtobyid(@PathVariable Integer id) {
 		Person person = personRepository.findById(id).get();
@@ -172,6 +183,15 @@ public class ApiBiodata {
 		dataService.getAge1(dlDto);
 		dlDto.setPendidikanTerakhir(pendidikanRepository.pendidikanTerakhir(person.getIdPerson()));
 		return dlDto;
+	}
+	
+	public PendidikanDto convertToPendidikanDto(Pendidikan pendidikan) {
+		PendidikanDto pendidikanDto = new PendidikanDto();
+		pendidikanDto.setJenjang(pendidikan.getJenjang());
+		pendidikanDto.setInstitusi(pendidikan.getInstitusi());
+		pendidikanDto.setMasuk(pendidikan.getTahunmasuk());
+		pendidikanDto.setLulus(pendidikan.getTahunlulus());
+		return pendidikanDto;
 	}
 	
 	public DataDto convertToDataDto(Person person) {
