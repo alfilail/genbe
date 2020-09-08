@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html layout:decorate="~{base}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+<div class="card card-primary" layout:fragment="content-body">
+	<div class="card-header">
+		<h3 class="card-title">Fill in the form below</h3>
+	</div>
+	<div class="card-body">
+		<label for="idperson">Id Person</label> <input type="number"
+						class="form-control" id="idperson" placeholder="Enter Id Person">
+		<form role="form" id="form">
+				<div class="form-group">
+					<label for="jenjang">Jenjang Pendidikan</label> <select
+						name="jenjang" id="jenjang">
+						<option>SD</option>
+						<option>SMP</option>
+						<option>SMA</option>
+						<option>D3</option>
+						<option>S1</option>
+						<option>S2</option>
+						<option>S3</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="institusi">Institusi</label> <input type="text"
+						class="form-control" id="institusi" placeholder="Enter Institusi">
+				</div>
+				<div class="form-group">
+					<label for="tahunmasuk">Tahun Masuk</label> <input type="text"
+						class="form-control" id="tahunmasuk"
+						placeholder="Enter Tahun Masuk">
+				</div>
+				<div class="form-group">
+					<label for="tahunlulus">Tahun Lulus</label> <input type="text"
+						class="form-control" id="tahunlulus"
+						placeholder="Enter Tahun Lulus">
+				</div>
+			<fieldset class="card card-outline">
+				<div class="form-group" id="additional"></div>
+			</fieldset>
+		</form>
+		<div class="card-footer">
+			<button type="submit" id="save" class="btn btn-primary">Save</button>
+		</div>
+		<div class="card-footer">
+			<button type="submit" id="add" class="btn btn-primary">Add</button>
+		</div>
+		<div class="card-footer">
+			<button type="submit" id="btn" class="btn btn-primary">Submit</button>
+		</div>
+		<div class="card-footer">
+			<button type="submit" id="reset" class="btn btn-primary">Reset</button>
+		</div>
+	</div>
+
+	<th:block layout:fragment="add-scripts">
+		<!-- jQuery -->
+		<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+		<script th:src="@{/js/default.js}"></script>
+		<script th:src="@{/js/biodata.js}"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.1/parsley.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+		<!-- DataTables -->
+		<script th:src="@{/plugins/datatables/jquery.dataTables.js}"></script>
+		<script
+			th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.js}"></script>
+		<!-- Sweetalert -->
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+		<script src="sweetalert2.all.min.js"></script>
+		<!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+		<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+		<!-- AdminLTE -->
+		<script th:src="@{/dist/js/adminlte.js}"></script>
+		<!--<script>
+			$(document)
+					.ready(
+							function() {
+								$('#add')
+										.click(
+												function() {
+													$('#additional')
+															.append('<fieldset class="card card-outline">'
+																			+ '<div class="form-group">'
+																			+ '<label for="idperson">Id Person</label><input type="number" class="form-control" id="idperson" placeholder="Enter Id Person">'
+																			+ '</div>'
+																			+ '<div class="form-group">'
+																			+ '<label for="jenjang">Jenjang Pendidikan</label> <select name="jenjang" id="jenjang">'
+																			+ '<option>SD</option>'
+																			+ '<option>SMP</option>'
+																			+ '<option>SMA</option>'
+																			+ '<option>D3</option>'
+																			+ '<option>S1</option>'
+																			+ '<option>S2</option>'
+																			+ '<option>S3</option>'
+																			+ '</select>'
+																			+ '</div>'
+																			+ '<div class="form-group">'
+																			+ '<label for="institusi">Institusi</label><input type="text" class="form-control" id="institusi" placeholder="Enter Institusi">'
+																			+ '</div>'
+																			+ '<div class="form-group">'
+																			+ '<label for="tahunmasuk">Tahun Masuk</label><input type="text" class="form-control" id="tahunmasuk" placeholder="Enter Tahun Masuk">'
+																			+ '</div>'
+																			+ '<div class="form-group">'
+																			+ '<label for="tahunlulus">Tahun Lulus</label> <input type="text" class="form-control" id="tahunlulus" placeholder="Enter Tahun Lulus">'
+																			+ '</div>' +'</fieldset>')
+												});
+							});
+		</script>-->
+		<script>
+			var datapendidikan = [];
+			$('#save').click(function() {
+				var element = {
+					jenjang : $('#jenjang').val(),
+					institusi : $('#institusi').val(),
+					masuk : $('#tahunmasuk').val(),
+					lulus : $('#tahunlulus').val()
+				};
+				datapendidikan.push(element);
+				$('#form')[0].reset();
+			});
+			$('#btn').click(function() {
+				$.ajax({
+					url : '/biodata/' + $('#idperson').val(),
+					method : 'post',
+					contentType : 'application/json',
+					dataType : 'json',
+					data : JSON.stringify(datapendidikan),
+				});
+				datapendidikan = [];
+			});
+			
+		</script>
+	</th:block>
+</div>
+</html>

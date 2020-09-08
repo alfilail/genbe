@@ -8,6 +8,7 @@ import com.genbe.anothertries.dto.DataDto;
 import com.genbe.anothertries.dto.DataLengkapDto;
 import com.genbe.anothertries.repository.BiodataRepository;
 import com.genbe.anothertries.repository.PersonRepository;
+import com.genbe.anothertries.entity.*;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -39,4 +40,11 @@ public class DataServiceImpl implements DataService {
 		dlDto.setUmur(Integer.toString(age1.getYears()));
 		return dlDto;
 	}
+	
+//	@Override
+//	public Person saveData(Person person) {
+//		biodataRepository.save(person.getBiodata());
+//		personRepository.save(person);
+//		return person;
+//	}
 }

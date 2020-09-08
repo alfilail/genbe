@@ -3,6 +3,7 @@ package com.genbe.anothertries.controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,9 @@ public class ApiBiodata {
 	private DataService dataService;
 	
 	@Autowired
+	private ModelMapper modelMapper;
+	
+	@Autowired
 	public ApiBiodata(PersonRepository personRepository, BiodataRepository biodataRepository, 
 			PendidikanRepository pendidikanRepository) {
 		this.personRepository = personRepository;
@@ -31,7 +35,45 @@ public class ApiBiodata {
 		this.pendidikanRepository = pendidikanRepository;
 	}
 	
-	@GetMapping("/{nik}")
+	@GetMapping
+	public List<DataLengkapDto> getDto() {
+		List<Person> personList = personRepository.findAll();
+		List<DataLengkapDto> dataDto = personList.stream().map(this::convertToDto).collect(Collectors.toList());
+		return dataDto;
+	}
+	
+	@GetMapping("/data")
+	public List<DataDto> getdata() {
+		List<Person> p = personRepository.findAll();
+		List<DataDto> dto = p.stream().map(this::convertToDataDto).collect(Collectors.toList());
+		return dto;
+	}
+	
+	@GetMapping("/{id}")
+	public DataDto getDtobyid(@PathVariable Integer id) {
+		Person person = personRepository.findById(id).get();
+		DataDto dataDto = new DataDto();
+		dataDto.setNik(person.getNik());
+		dataDto.setName(person.getNama());
+		dataDto.setAddress(person.getAlamat());
+		dataDto.setHp(person.getBiodata().getNoHp());
+		dataDto.setTgl(person.getBiodata().getTanggalLahir());
+		dataDto.setTempatLahir(person.getBiodata().getTempatLahir());
+		return dataDto;
+	}
+	
+	@GetMapping("/test")
+	public List<Bioperson> get() {
+		List<Bioperson> bioperson = new ArrayList<>();
+		Bioperson b = new Bioperson();
+		b.setNamadepan("nur");
+		b.setNamabelakang("alfilail");
+		b.setTempattinggal("depok");
+		bioperson.add(b);
+		return bioperson;
+	}
+	
+	@GetMapping("/bynik/{nik}")
 	public List<Object> get(@PathVariable String nik) {
 		List<Object> object = new ArrayList<>();
 		StatusDataLengkapDto statusdlDto = new StatusDataLengkapDto();
@@ -84,8 +126,18 @@ public class ApiBiodata {
 		return statusDto;
 	}
 	
+	@PostMapping("/data")
+	public DataDto editSaveData(@RequestBody DataDto dataDto) {
+		Biodata biodata = modelMapper.map(dataDto, Biodata.class);
+		Person person = modelMapper.map(dataDto, Person.class);
+		biodata.setPerson(person);
+		personRepository.save(biodata.getPerson());
+		biodataRepository.save(biodata);
+		return dataDto;
+	}
+	
 	@PostMapping("/{idPerson}")
-	public StatusDto insert(@RequestBody List<PendidikanDto> pendidikanDto, @RequestParam Integer idPerson) {
+	public StatusDto insert(@RequestBody List<PendidikanDto> pendidikanDto, @PathVariable Integer idPerson) {
 		StatusDto statusDto = new StatusDto();
 		try {
 			if (personRepository.findById(idPerson).isPresent()) {
@@ -103,6 +155,12 @@ public class ApiBiodata {
 		return statusDto;
 	}
 	
+	public DataDto mapToDataDto(Person person) {
+		DataDto dataDto = modelMapper.map(person, DataDto.class);
+		modelMapper.map(person.getBiodata(), dataDto);
+		return dataDto;
+	}
+	
 	public DataLengkapDto convertToDto(Person person) {
 		DataLengkapDto dlDto = new DataLengkapDto();
 		dlDto.setNik(person.getNik());
@@ -114,6 +172,17 @@ public class ApiBiodata {
 		dataService.getAge1(dlDto);
 		dlDto.setPendidikanTerakhir(pendidikanRepository.pendidikanTerakhir(person.getIdPerson()));
 		return dlDto;
+	}
+	
+	public DataDto convertToDataDto(Person person) {
+		DataDto dataDto = new DataDto();
+		dataDto.setName(person.getNama());
+		dataDto.setNik(person.getNik());
+		dataDto.setAddress(person.getAlamat());
+		dataDto.setHp(person.getBiodata().getNoHp());
+		dataDto.setTempatLahir(person.getBiodata().getTempatLahir());
+		dataDto.setTgl(person.getBiodata().getTanggalLahir());
+		return dataDto;
 	}
 	
 	public Person convertToPerson(DataDto dataDto) {
