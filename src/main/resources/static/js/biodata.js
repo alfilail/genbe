@@ -133,6 +133,7 @@ var formBiodata = {
         var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
         datapendidikan.push(dataResult);
         tableBiodata.creatependidikan(idperson);
+        $('#modal-biodata').modal('hide')
     },
     submitPend : function(idPerson) {
         $.ajax({
@@ -143,6 +144,39 @@ var formBiodata = {
             data : JSON.stringify(datapendidikan),
             success : function(res, status, xhr) {
                 datapendidikan = [];
+                if ($.fn.DataTable.isDataTable('#tableBiodata')) {
+                    //table yg sudah dibentuk menjadi datatable harus d rebuild lagi untuk di instantiasi ulang
+                    $('#tableBiodata').DataTable().clear();
+                    $('#tableBiodata').DataTable().destroy();
+                };
+                $('#tableBiodata').DataTable({
+                    data: datapendidikan,
+                    columns: [
+                        {
+                            title: "Jenjang Pendidikan",
+                            data: "jenjang"
+                        },
+                        {
+                            title: "Institusi",
+                            data: "institusi"
+                        },
+                        {
+                            title: "Tahun Masuk",
+                            data: "masuk"
+                        },
+                        {
+                            title: "Tahun Lulus",
+                            data: "lulus"
+                        },
+                        {
+                            title: "Action",
+                            data: null,
+                            render: function (data, type, row) {
+                                return "<button class='btn-primary' onclick=formBiodata.setEditData('" + data.id + "')>Edit</button>"
+                            }
+                        }
+                    ]
+                });
             },
             erorrr : function(err) {
                 console.log(err);
