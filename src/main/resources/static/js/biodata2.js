@@ -44,7 +44,8 @@ var tableBiodata = {
                                 title: "Action",
                                 data: null,
                                 render: function (data, type, row) {
-                                    return "<button class='btn-primary' onclick=formBiodata.setEditData('" + data.id + "')>Edit</button>"
+                                    return "<button class='btn-primary' onclick=formBiodata.setEditData('" + data.idPerson + "')>Edit</button>"
+                                    console.log(idPerson);
                                 }
                             }
                         ]
@@ -105,9 +106,7 @@ var formBiodata = {
 		$('#form-biodata')[0].reset();
 	},
 	saveForm : function() {
-		
             var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
-
             $.ajax({
                 url : '/biodata',
                 method : 'post',
@@ -223,5 +222,28 @@ var formBiodata = {
                 console.log(err);
             }
         })
+    },
+    setEditData: function (idPerson) {
+        formBiodata.resetForm();
+        $.ajax({
+            url: '/biodata/edit/' + idPerson,
+            method: 'get',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (res, status, xhr) {
+                if (xhr.status == 200 || xhr.status == 201) {
+                    $('#form-biodata').fromJSON(JSON.stringify(res));
+                    $('#modal-biodata').modal('show')
+
+                } else {
+
+                }
+            },
+            erorrr: function (err) {
+                console.log(err);
+            }
+        });
+
+
     }
 };

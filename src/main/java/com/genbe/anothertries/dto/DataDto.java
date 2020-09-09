@@ -4,13 +4,27 @@ import java.sql.Date;
 
 public class DataDto {
 
+	private Integer idPerson;
 	private String nik;
 	private String name;
 	private String address;
 	private String hp;
 	private Date tgl;
 	private String tempatLahir;
+	private Integer idBio;
 	
+	public Integer getIdBio() {
+		return idBio;
+	}
+	public void setIdBio(Integer idBio) {
+		this.idBio = idBio;
+	}
+	public Integer getIdPerson() {
+		return idPerson;
+	}
+	public void setIdPerson(Integer idPerson) {
+		this.idPerson = idPerson;
+	}
 	public String getNik() {
 		return nik;
 	}

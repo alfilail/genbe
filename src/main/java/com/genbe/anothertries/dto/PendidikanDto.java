@@ -2,11 +2,18 @@ package com.genbe.anothertries.dto;
 
 public class PendidikanDto {
 
+	private Integer idPendidikan;
 	private String jenjang;
 	private String institusi;
 	private String masuk;
 	private String lulus;
 	
+	public Integer getIdPendidikan() {
+		return idPendidikan;
+	}
+	public void setIdPendidikan(Integer idPendidikan) {
+		this.idPendidikan = idPendidikan;
+	}
 	public String getJenjang() {
 		return jenjang;
 	}

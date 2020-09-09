@@ -30,4 +30,9 @@ public class ApiHtml {
 	public String dashboard5() {
 		return "dashboard/pendidikanmodal";
 	}
+	
+	@GetMapping("/dashboard6")
+	public String dashboard6() {
+		return "dashboard/personbiodatamodaledit";
+	}
 }
