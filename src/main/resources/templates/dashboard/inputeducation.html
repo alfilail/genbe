@@ -30,6 +30,8 @@
                 <table class="table table-striped table-bordered table-hover nowrap" id="tableBiodata"
                        style="width:100%"></table>
             </div>
+            <button class="btn btn-primary" id="submit" type="button">Submit</button>
+
             <!-- /.card-body -->
         </div>
         <!-- /.card -->
@@ -51,43 +53,37 @@
 
                     </div>
                     <form id="form-biodata" role="form">
-                        <input name="id" type="hidden"/>
-                        <input name="idDetail" type="hidden">
-
+                        <label for="idperson">Id Person</label> <input type="number"
+						class="form-control" id="idperson" placeholder="Enter Id Person">
                         <div class="form-group">
-                            <label>NIK</label>
-                            <input class="form-control" id="nik" name="nik"
-                                   placeholder="NIK" required type="text">
+                            <label>Jenjang Pendidikan</label>
+                            <select name="jenjang" id="jenjang">
+                                <option>SD</option>
+                                <option>SMP</option>
+                                <option>SMA</option>
+                                <option>D3</option>
+                                <option>S1</option>
+                                <option>S2</option>
+                                <option>S3</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <label>Name</label>
-                            <input class="form-control" id="name" name="name"
-                                   placeholder="Name" required type="text">
+                            <label>Institusi</label>
+                            <input class="form-control" id="institusi" name="institusi"
+                                   placeholder="Institusi" required type="text">
                         </div>
 
                         <div class="form-group">
-                            <label>Address</label>
-                            <input class="form-control" id="address" name="address"
-                                   placeholder="Address" required type="text">
+                            <label>Tahun Masuk</label>
+                            <input class="form-control" id="masuk" name="masuk"
+                                   placeholder="Tahun Masuk" required type="text">
                         </div>
 
                         <div class="form-group">
-                            <label>Mobile</label>
-                            <input class="form-control" id="hp" name="hp"
-                                   placeholder="Mobile" required type="text">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Birthdate</label>
-                            <input class="form-control" id="tgl" name="tgl"
-                                   placeholder="Birthdate" required type="date">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Birthplace</label>
-                            <input class="form-control" id="tempatLahir" name="tempatLahir"
-                                   placeholder="Birthplace" required type="text">
+                            <label>Tahun Lulus</label>
+                            <input class="form-control" id="lulus" name="lulus"
+                                   placeholder="Tahun Lulus" required type="text">
                         </div>
                     </form>
                 </div>
@@ -105,30 +101,10 @@
 
 
 <th:block layout:fragment="add-scripts">
-    <!-- jQuery -->
-	<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
-	<script th:src="@{/js/default.js}"></script>
-	<script th:src="@{/js/biodata.js}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.1/parsley.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<!-- Bootstrap -->
-	<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
-	<!-- overlayScrollbars -->
-	<script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
-	<script src="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
-	<!-- Select2 -->
-	<script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>
-	<!-- DataTables -->
-	<script th:src="@{/plugins/datatables/jquery.dataTables.js}"></script>
-	<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.js}"></script>
-	<!-- Sweetalert -->
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-	<!-- AdminLTE -->
-	<script th:src="@{/dist/js/adminlte.js}"></script>
-
     <script>
-        tableBiodata.create();
-
+        tableBiodata.creatependidikan($('#idperson').val());
+        var datapendidikan = [];
+        var newrow = -1;
         $('#btn-cari-pasien').click(function () {
             var tanggalLahir = new Date($('#tanggalLahir').val()) * 1;
             tableKelolaPasien.create();
@@ -140,9 +116,16 @@
         });
 
         $('#btn-save-biodata').click(function () {
-            formBiodata.saveForm()
-        })
+            if(newrow < 0) {
+                formBiodata.saveFormPend($('#idperson').val());
+            } else {
+                formBiodata.saveFormPendBaru($('#idperson').val());
+            }
+        });
 
+        $('#submit').click(function () {
+            formBiodata.submitPend($('#idperson').val());
+        });
     </script>
 </th:block>
 

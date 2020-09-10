@@ -105,31 +105,9 @@
 
 
 <th:block layout:fragment="add-scripts">
-    <!-- jQuery -->
-    <script th:src="@{/plugins/jquery/jquery.min.js}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.1/parsley.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script th:src="@{/js/default.js}"></script>
-	<script th:src="@{/js/biodata2.js}"></script>
-	<!-- Bootstrap -->
-	<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
-	<!-- overlayScrollbars -->
-	<script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
-	<script src="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
-	<!-- Select2 -->
-	<script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>
-	<!-- DataTables -->
-	<script th:src="@{/plugins/datatables/jquery.dataTables.js}"></script>
-	<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.js}"></script>
-	<!-- Sweetalert -->
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-	<!-- AdminLTE -->
-	<script th:src="@{/dist/js/adminlte.js}"></script>
-
     <script>
         tableBiodata.create();
         var editbio = 0;
-
         $('#btn-cari-pasien').click(function () {
             var tanggalLahir = new Date($('#tanggalLahir').val()) * 1;
             tableKelolaPasien.create();
@@ -150,7 +128,6 @@
                 formBiodata.saveForm()
             }
         })
-
     </script>
 </th:block>
 

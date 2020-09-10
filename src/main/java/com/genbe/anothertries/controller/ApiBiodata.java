@@ -3,7 +3,6 @@ package com.genbe.anothertries.controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +22,6 @@ public class ApiBiodata {
 	
 	@Autowired
 	private DataService dataService;
-	
-	@Autowired
-	private ModelMapper modelMapper;
 	
 	@Autowired
 	public ApiBiodata(PersonRepository personRepository, BiodataRepository biodataRepository, 
@@ -49,29 +45,6 @@ public class ApiBiodata {
 		return dto;
 	}
 	
-	@GetMapping("/pendidikan/{idPerson}")
-	public List<PendidikanDto> getpendidikan(@PathVariable Integer idPerson) {
-		if(personRepository.findById(idPerson).isPresent()) {
-			List<Pendidikan> p = pendidikanRepository.findAllByPersonIdPerson(idPerson);
-			List<PendidikanDto> dto = p.stream().map(this::convertToPendidikanDto).collect(Collectors.toList());
-			return dto;
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
-	
-	@GetMapping("/byidpend/{idpend}")
-	public PendidikanDto dto(@PathVariable Integer idpend) {
-		Pendidikan pendidikan = pendidikanRepository.findById(idpend).get();
-		PendidikanDto dto = new PendidikanDto();
-		dto.setIdPendidikan(pendidikan.getIdPendidikan());
-		dto.setJenjang(pendidikan.getJenjang());
-		dto.setInstitusi(pendidikan.getInstitusi());
-		dto.setMasuk(pendidikan.getTahunmasuk());
-		dto.setLulus(pendidikan.getTahunlulus());
-		return dto;
-	}
-	
 	@GetMapping("/edit/{idPerson}")
 	public DataDto getDtobyid(@PathVariable Integer idPerson) {
 		Person person = personRepository.findById(idPerson).get();
@@ -85,17 +58,6 @@ public class ApiBiodata {
 		dataDto.setTempatLahir(person.getBiodata().getTempatLahir());
 		dataDto.setIdBio(person.getBiodata().getIdBiodata());
 		return dataDto;
-	}
-	
-	@GetMapping("/test")
-	public List<Bioperson> get() {
-		List<Bioperson> bioperson = new ArrayList<>();
-		Bioperson b = new Bioperson();
-		b.setNamadepan("nur");
-		b.setNamabelakang("alfilail");
-		b.setTempattinggal("depok");
-		bioperson.add(b);
-		return bioperson;
 	}
 	
 	@GetMapping("/bynik/{nik}")
@@ -123,18 +85,6 @@ public class ApiBiodata {
 		}
 		return object;
 	}
-	
-//	@PostMapping("/editdata")
-//	public DataDto editdata(@RequestBody DataDto dataDto) {
-//		Biodata b = convertToBiodata(dataDto);
-//		Person p = convertToPerson(dataDto);
-//		biodataRepository.save(p.getBiodata());
-//		b.setIdBiodata(Integer.parseInt(dataDto.getIdBio()));
-//		p.setBiodata(b);
-//		personRepository.save(p);
-//		DataDto dataDtob = convertToDataDtoEdit(p);
-//		return dataDtob;
-//	}
 	
 	@PostMapping
 	public StatusDto insert(@RequestBody DataDto dataDto) {
@@ -190,16 +140,6 @@ public class ApiBiodata {
 		return statusDto;
 	}
 	
-	@PostMapping("/data")
-	public DataDto editSaveData(@RequestBody DataDto dataDto) {
-		Biodata biodata = modelMapper.map(dataDto, Biodata.class);
-		Person person = modelMapper.map(dataDto, Person.class);
-		biodata.setPerson(person);
-		personRepository.save(biodata.getPerson());
-		biodataRepository.save(biodata);
-		return dataDto;
-	}
-	
 	@PostMapping("/{idPerson}")
 	public StatusDto insert(@RequestBody List<PendidikanDto> pendidikanDto, @PathVariable Integer idPerson) {
 		StatusDto statusDto = new StatusDto();
@@ -218,39 +158,6 @@ public class ApiBiodata {
 		}
 		return statusDto;
 	}
-	
-	@PostMapping("/pendidikan2/{idPerson}")
-	public StatusDto insert(@RequestBody PendidikanDto pendidikanDto, @PathVariable Integer idPerson) {
-		StatusDto statusDto = new StatusDto();
-		try {
-			if (personRepository.findById(idPerson).isPresent()) {
-				Pendidikan pendidikan = convertToPendidikan(pendidikanDto, idPerson);
-				pendidikanRepository.save(pendidikan);
-				pendidikanDto.setIdPendidikan(pendidikan.getIdPendidikan());
-				statusDto.setStatus("true");
-				statusDto.setMessage("data berhasil masuk");
-			} else {
-				throw new IllegalArgumentException();
-			}
-		} catch (Exception e) {
-			statusDto.setStatus("false");
-			statusDto.setMessage("data gagal masuk");
-		}
-		return statusDto;
-	}
-	
-//	public DataDto convertToDataDtoEdit(Person p) {
-//		DataDto dataDto = new DataDto();
-//		dataDto.setIdPerson(p.getIdPerson());
-//		dataDto.setNik(p.getNik());
-//		dataDto.setName(p.getNama());
-//		dataDto.setAddress(p.getAlamat());
-//		dataDto.setHp(p.getBiodata().getNoHp());
-//		dataDto.setTempatLahir(p.getBiodata().getTempatLahir());
-//		dataDto.setTgl(p.getBiodata().getTanggalLahir());
-//		dataDto.setIdBio(p.getBiodata().getIdBiodata().toString());
-//		return dataDto;
-//	}
 	
 	public DataDto convertToDataDto(Person person) {
 		DataDto dataDto = new DataDto();
@@ -276,15 +183,6 @@ public class ApiBiodata {
 		dataService.getAge1(dlDto);
 		dlDto.setPendidikanTerakhir(pendidikanRepository.pendidikanTerakhir(person.getIdPerson()));
 		return dlDto;
-	}
-	
-	public PendidikanDto convertToPendidikanDto(Pendidikan pendidikan) {
-		PendidikanDto pendidikanDto = new PendidikanDto();
-		pendidikanDto.setJenjang(pendidikan.getJenjang());
-		pendidikanDto.setInstitusi(pendidikan.getInstitusi());
-		pendidikanDto.setMasuk(pendidikan.getTahunmasuk());
-		pendidikanDto.setLulus(pendidikan.getTahunlulus());
-		return pendidikanDto;
 	}
 	
 	public Person convertToPerson(DataDto dataDto) {
@@ -343,3 +241,95 @@ public class ApiBiodata {
 	}
 	
 }
+//@GetMapping("/pendidikan/{idPerson}")
+//public List<PendidikanDto> getpendidikan(@PathVariable Integer idPerson) {
+//	if(personRepository.findById(idPerson).isPresent()) {
+//		List<Pendidikan> p = pendidikanRepository.findAllByPersonIdPerson(idPerson);
+//		List<PendidikanDto> dto = p.stream().map(this::convertToPendidikanDto).collect(Collectors.toList());
+//		return dto;
+//	} else {
+//		throw new IllegalArgumentException();
+//	}
+//}
+
+//@GetMapping("/byidpend/{idpend}")
+//public PendidikanDto dto(@PathVariable Integer idpend) {
+//	Pendidikan pendidikan = pendidikanRepository.findById(idpend).get();
+//	PendidikanDto dto = new PendidikanDto();
+//	dto.setIdPendidikan(pendidikan.getIdPendidikan());
+//	dto.setJenjang(pendidikan.getJenjang());
+//	dto.setInstitusi(pendidikan.getInstitusi());
+//	dto.setMasuk(pendidikan.getTahunmasuk());
+//	dto.setLulus(pendidikan.getTahunlulus());
+//	return dto;
+//}
+//@GetMapping("/test")
+//public List<Bioperson> get() {
+//	List<Bioperson> bioperson = new ArrayList<>();
+//	Bioperson b = new Bioperson();
+//	b.setNamadepan("nur");
+//	b.setNamabelakang("alfilail");
+//	b.setTempattinggal("depok");
+//	bioperson.add(b);
+//	return bioperson;
+//}
+//@PostMapping("/editdata")
+//public DataDto editdata(@RequestBody DataDto dataDto) {
+//	Biodata b = convertToBiodata(dataDto);
+//	Person p = convertToPerson(dataDto);
+//	biodataRepository.save(p.getBiodata());
+//	b.setIdBiodata(Integer.parseInt(dataDto.getIdBio()));
+//	p.setBiodata(b);
+//	personRepository.save(p);
+//	DataDto dataDtob = convertToDataDtoEdit(p);
+//	return dataDtob;
+//}
+//@PostMapping("/data")
+//public DataDto editSaveData(@RequestBody DataDto dataDto) {
+//	Biodata biodata = modelMapper.map(dataDto, Biodata.class);
+//	Person person = modelMapper.map(dataDto, Person.class);
+//	biodata.setPerson(person);
+//	personRepository.save(biodata.getPerson());
+//	biodataRepository.save(biodata);
+//	return dataDto;
+//}
+//@PostMapping("/pendidikan2/{idPerson}")
+//public StatusDto insert(@RequestBody PendidikanDto pendidikanDto, @PathVariable Integer idPerson) {
+//	StatusDto statusDto = new StatusDto();
+//	try {
+//		if (personRepository.findById(idPerson).isPresent()) {
+//			Pendidikan pendidikan = convertToPendidikan(pendidikanDto, idPerson);
+//			pendidikanRepository.save(pendidikan);
+//			pendidikanDto.setIdPendidikan(pendidikan.getIdPendidikan());
+//			statusDto.setStatus("true");
+//			statusDto.setMessage("data berhasil masuk");
+//		} else {
+//			throw new IllegalArgumentException();
+//		}
+//	} catch (Exception e) {
+//		statusDto.setStatus("false");
+//		statusDto.setMessage("data gagal masuk");
+//	}
+//	return statusDto;
+//}
+
+//public DataDto convertToDataDtoEdit(Person p) {
+//	DataDto dataDto = new DataDto();
+//	dataDto.setIdPerson(p.getIdPerson());
+//	dataDto.setNik(p.getNik());
+//	dataDto.setName(p.getNama());
+//	dataDto.setAddress(p.getAlamat());
+//	dataDto.setHp(p.getBiodata().getNoHp());
+//	dataDto.setTempatLahir(p.getBiodata().getTempatLahir());
+//	dataDto.setTgl(p.getBiodata().getTanggalLahir());
+//	dataDto.setIdBio(p.getBiodata().getIdBiodata().toString());
+//	return dataDto;
+//}
+//public PendidikanDto convertToPendidikanDto(Pendidikan pendidikan) {
+//PendidikanDto pendidikanDto = new PendidikanDto();
+//pendidikanDto.setJenjang(pendidikan.getJenjang());
+//pendidikanDto.setInstitusi(pendidikan.getInstitusi());
+//pendidikanDto.setMasuk(pendidikan.getTahunmasuk());
+//pendidikanDto.setLulus(pendidikan.getTahunlulus());
+//return pendidikanDto;
+//}

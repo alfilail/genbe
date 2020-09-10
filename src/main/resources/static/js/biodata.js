@@ -101,86 +101,106 @@ var tableBiodata = {
 };
 
 var formBiodata = {
-	resetForm : function() {
-		$('#form-biodata')[0].reset();
-	},
-	saveForm : function() {
-		
-            var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
-
-            $.ajax({
-                url : '/biodata',
-                method : 'post',
-                contentType : 'application/json',
-                dataType : 'json',
-                data : JSON.stringify(dataResult),
-                success : function(res, status, xhr) {
-                    if (xhr.status == 200 || xhr.status == 201) {
-                            tableBiodata.create();
-                            $('#modal-biodata').modal('hide')
-
-                    } else {
-
-                    }
-                },
-                erorrr : function(err) {
-                    console.log(err);
-                }
-            });
-		
+    resetForm: function () {
+        $('#form-biodata')[0].reset();
     },
-    saveFormPend : function(idperson) {
+    saveForm: function () {
+        var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
+        $.ajax({
+            url: '/biodata',
+            method: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(dataResult),
+            success: function (res, status, xhr) {
+                if (xhr.status == 200 || xhr.status == 201) {
+                    tableBiodata.create();
+                    $('#modal-biodata').modal('hide')
+
+                } else {
+
+                }
+            },
+            erorrr: function (err) {
+                console.log(err);
+            }
+        });
+
+    },
+    saveFormEdit: function () {
+        var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
+        $.ajax({
+            url: '/biodata/editbio',
+            method: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(dataResult),
+            success: function (res, status, xhr) {
+                if (xhr.status == 200 || xhr.status == 201) {
+                    tableBiodata.create();
+                    $('#modal-biodata').modal('hide')
+                    editbio = 0;
+                } else {
+
+                }
+            },
+            erorrr: function (err) {
+                console.log(err);
+            }
+        });
+
+    },
+    saveFormPend: function (idperson) {
         var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
         datapendidikan.push(dataResult);
         $('#modal-biodata').modal('hide');
         tableBiodata.creatependidikan(idperson);
     },
-    setEditDataPendidikan : function(row) {
-		$('#modal-biodata').fromJSON(JSON.stringify(datapendidikan[row]));
+    setEditDataPendidikan: function (row) {
+        $('#modal-biodata').fromJSON(JSON.stringify(datapendidikan[row]));
         $('#modal-biodata').modal('show');
         newrow = row;
     },
-    saveFormPendBaru : function(idperson) {
+    saveFormPendBaru: function (idperson) {
         var resultbaru = getJsonForm($("#form-biodata").serializeArray(), true);
         datapendidikan[newrow] = resultbaru;
         $('#modal-biodata').modal('hide');
         tableBiodata.creatependidikan(idperson);
         newrow = -1;
     },
-    submitPend : function(idPerson) {
+    submitPend: function (idPerson) {
         $.ajax({
-            url : '/biodata/' + idPerson,
-            method : 'post',
-            contentType : 'application/json',
-            dataType : 'json',
-            data : JSON.stringify(datapendidikan),
-            success : function(res, status, xhr) {
+            url: '/biodata/' + idPerson,
+            method: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(datapendidikan),
+            success: function (res, status, xhr) {
                 datapendidikan = [];
                 tableBiodata.creatependidikan(idPerson);
             },
-            erorrr : function(err) {
+            erorrr: function (err) {
                 console.log(err);
             }
         });
     },
-    getbynik : function(nik) {
+    getbynik: function (nik) {
         if ($.fn.DataTable.isDataTable('#tableBiodata')) {
             //table yg sudah dibentuk menjadi datatable harus d rebuild lagi untuk di instantiasi ulang
             $('#tableBiodata').DataTable().clear();
             $('#tableBiodata').DataTable().destroy();
         }
-
         $.ajax({
-            url : '/biodata/bynik/' + nik,
-            method : 'get',
-            contentType : 'application/json',
-            dataType : 'json',
+            url: '/biodata/bynik/' + nik,
+            method: 'get',
+            contentType: 'application/json',
+            dataType: 'json',
 
-            success : function(result) {
-                if(result[0].status == 'true') {
+            success: function (result) {
+                if (result[0].status == 'true') {
                     $('#tableBiodata').DataTable({
-                        data : [result[0].data],
-                        columns : [
+                        data: [result[0].data],
+                        columns: [
                             {
                                 title: "NIK",
                                 data: "nik"
@@ -219,9 +239,30 @@ var formBiodata = {
 
                 }
             },
-            error : function(err) {
+            error: function (err) {
                 console.log(err);
             }
         })
+    },
+    setEditData: function (id) {
+        formBiodata.resetForm();
+        $.ajax({
+            url: '/biodata/edit/' + id,
+            method: 'get',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (res, status, xhr) {
+                if (xhr.status == 200 || xhr.status == 201) {
+                    $('#form-biodata').fromJSON(JSON.stringify(res));
+                    $('#modal-biodata').modal('show')
+                    editbio = 1;
+                } else {
+
+                }
+            },
+            erorrr: function (err) {
+                console.log(err);
+            }
+        });
     }
 };
