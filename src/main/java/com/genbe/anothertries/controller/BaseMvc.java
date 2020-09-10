@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-public class ApiHtml {
+public class BaseMvc {
 	
 	@GetMapping("/dashboard1")
 	public String dashboard1() {
