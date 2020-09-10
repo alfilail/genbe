@@ -76,14 +76,14 @@ public class ApiBiodata {
 	public DataDto getDtobyid(@PathVariable Integer idPerson) {
 		Person person = personRepository.findById(idPerson).get();
 		DataDto dataDto = new DataDto();
-		dataDto.setIdPerson(person.getIdPerson());
-		dataDto.setIdBio(person.getBiodata().getIdBiodata());
+//		dataDto.setIdPerson(person.getIdPerson());
 		dataDto.setNik(person.getNik());
 		dataDto.setName(person.getNama());
 		dataDto.setAddress(person.getAlamat());
 		dataDto.setHp(person.getBiodata().getNoHp());
 		dataDto.setTgl(person.getBiodata().getTanggalLahir());
 		dataDto.setTempatLahir(person.getBiodata().getTempatLahir());
+//		dataDto.setIdBio(person.getBiodata().getIdBiodata().toString());
 		return dataDto;
 	}
 	
@@ -123,6 +123,18 @@ public class ApiBiodata {
 		}
 		return object;
 	}
+	
+//	@PostMapping("/editdata")
+//	public DataDto editdata(@RequestBody DataDto dataDto) {
+//		Biodata b = convertToBiodata(dataDto);
+//		Person p = convertToPerson(dataDto);
+//		biodataRepository.save(p.getBiodata());
+//		b.setIdBiodata(Integer.parseInt(dataDto.getIdBio()));
+//		p.setBiodata(b);
+//		personRepository.save(p);
+//		DataDto dataDtob = convertToDataDtoEdit(p);
+//		return dataDtob;
+//	}
 	
 	@PostMapping
 	public StatusDto insert(@RequestBody DataDto dataDto) {
@@ -200,9 +212,29 @@ public class ApiBiodata {
 		return statusDto;
 	}
 	
-	public DataDto mapToDataDto(Person person) {
-		DataDto dataDto = modelMapper.map(person, DataDto.class);
-		modelMapper.map(person.getBiodata(), dataDto);
+//	public DataDto convertToDataDtoEdit(Person p) {
+//		DataDto dataDto = new DataDto();
+//		dataDto.setIdPerson(p.getIdPerson());
+//		dataDto.setNik(p.getNik());
+//		dataDto.setName(p.getNama());
+//		dataDto.setAddress(p.getAlamat());
+//		dataDto.setHp(p.getBiodata().getNoHp());
+//		dataDto.setTempatLahir(p.getBiodata().getTempatLahir());
+//		dataDto.setTgl(p.getBiodata().getTanggalLahir());
+//		dataDto.setIdBio(p.getBiodata().getIdBiodata().toString());
+//		return dataDto;
+//	}
+	
+	public DataDto convertToDataDto(Person person) {
+		DataDto dataDto = new DataDto();
+		dataDto.setId(person.getIdPerson());
+		dataDto.setName(person.getNama());
+		dataDto.setNik(person.getNik());
+		dataDto.setAddress(person.getAlamat());
+		dataDto.setHp(person.getBiodata().getNoHp());
+		dataDto.setTempatLahir(person.getBiodata().getTempatLahir());
+		dataDto.setTgl(person.getBiodata().getTanggalLahir());
+		dataDto.setIdBio(person.getBiodata().getIdBiodata());
 		return dataDto;
 	}
 	
@@ -228,20 +260,8 @@ public class ApiBiodata {
 		return pendidikanDto;
 	}
 	
-	public DataDto convertToDataDto(Person person) {
-		DataDto dataDto = new DataDto();
-		dataDto.setName(person.getNama());
-		dataDto.setNik(person.getNik());
-		dataDto.setAddress(person.getAlamat());
-		dataDto.setHp(person.getBiodata().getNoHp());
-		dataDto.setTempatLahir(person.getBiodata().getTempatLahir());
-		dataDto.setTgl(person.getBiodata().getTanggalLahir());
-		return dataDto;
-	}
-	
 	public Person convertToPerson(DataDto dataDto) {
 		Person person = new Person();
-		person.setIdPerson(dataDto.getIdPerson());
 		person.setNik(dataDto.getNik());
 		person.setNama(dataDto.getName());
 		person.setAlamat(dataDto.getAddress());
@@ -251,7 +271,6 @@ public class ApiBiodata {
 	Integer i= 0;
 	public Biodata convertToBiodata(DataDto dataDto) {
 		Biodata biodata = new Biodata();
-		biodata.setIdBiodata(dataDto.getIdBio());
 		biodata.setNoHp(dataDto.getHp());
 		biodata.setTanggalLahir(dataDto.getTgl());
 		biodata.setTempatLahir(dataDto.getTempatLahir());

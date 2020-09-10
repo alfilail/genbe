@@ -44,7 +44,7 @@ var tableBiodata = {
                                 title: "Action",
                                 data: null,
                                 render: function (data, type, row) {
-                                    return "<button class='btn-primary' onclick=formBiodata.setEditData('" + data.idPerson + "')>Edit</button>"
+                                    return "<button class='btn-primary' onclick=formBiodata.setEditData('" + data.id+ "')>Edit</button>"
                                     console.log(idPerson);
                                 }
                             }
@@ -223,10 +223,10 @@ var formBiodata = {
             }
         })
     },
-    setEditData: function (idPerson) {
+    setEditData: function (id) {
         formBiodata.resetForm();
         $.ajax({
-            url: '/biodata/edit/' + idPerson,
+            url: '/biodata/edit/' + id,
             method: 'get',
             contentType: 'application/json',
             dataType: 'json',
