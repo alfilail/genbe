@@ -128,6 +128,7 @@
 
     <script>
         tableBiodata.create();
+        var editbio = 0;
 
         $('#btn-cari-pasien').click(function () {
             var tanggalLahir = new Date($('#tanggalLahir').val()) * 1;
@@ -135,12 +136,19 @@
         });
 
         $('#btn-tambah-biodata').click(function () {
+            editbio = 0;
+            $('#id').val('');
+            $('#idBio').val('');
             formBiodata.resetForm();
             $('#modal-biodata').modal('show')
         });
 
         $('#btn-save-biodata').click(function () {
-            formBiodata.saveForm()
+            if(editbio>0) {
+                formBiodata.saveFormEdit()
+            } else {
+                formBiodata.saveForm()
+            }
         })
 
     </script>

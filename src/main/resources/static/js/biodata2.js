@@ -128,6 +128,29 @@ var formBiodata = {
             });
 		
     },
+    saveFormEdit : function() {
+        var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
+        $.ajax({
+            url : '/biodata/editbio',
+            method : 'post',
+            contentType : 'application/json',
+            dataType : 'json',
+            data : JSON.stringify(dataResult),
+            success : function(res, status, xhr) {
+                if (xhr.status == 200 || xhr.status == 201) {
+                        tableBiodata.create();
+                        $('#modal-biodata').modal('hide')
+                        editbio = 0;
+                } else {
+
+                }
+            },
+            erorrr : function(err) {
+                console.log(err);
+            }
+        });
+    
+    },
     saveFormPend : function(idperson) {
         var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
         datapendidikan.push(dataResult);
@@ -234,7 +257,7 @@ var formBiodata = {
                 if (xhr.status == 200 || xhr.status == 201) {
                     $('#form-biodata').fromJSON(JSON.stringify(res));
                     $('#modal-biodata').modal('show')
-
+                    editbio = 1;
                 } else {
 
                 }
@@ -243,7 +266,5 @@ var formBiodata = {
                 console.log(err);
             }
         });
-
-
     }
 };

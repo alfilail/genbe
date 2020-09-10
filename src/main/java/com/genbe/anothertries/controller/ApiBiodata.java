@@ -76,14 +76,14 @@ public class ApiBiodata {
 	public DataDto getDtobyid(@PathVariable Integer idPerson) {
 		Person person = personRepository.findById(idPerson).get();
 		DataDto dataDto = new DataDto();
-//		dataDto.setIdPerson(person.getIdPerson());
+		dataDto.setId(person.getIdPerson());
 		dataDto.setNik(person.getNik());
 		dataDto.setName(person.getNama());
 		dataDto.setAddress(person.getAlamat());
 		dataDto.setHp(person.getBiodata().getNoHp());
 		dataDto.setTgl(person.getBiodata().getTanggalLahir());
 		dataDto.setTempatLahir(person.getBiodata().getTempatLahir());
-//		dataDto.setIdBio(person.getBiodata().getIdBiodata().toString());
+		dataDto.setIdBio(person.getBiodata().getIdBiodata());
 		return dataDto;
 	}
 	
@@ -144,7 +144,34 @@ public class ApiBiodata {
 		if (dataDto.getNik().length()==16 && Integer.parseInt(dlDto.getUmur()) >= 30) {
 			Person person = convertToPerson(dataDto);
 			personRepository.save(person);
-			Biodata biodata = convertToBiodata(dataDto);
+			Biodata biodata = convertToBiodata(dataDto, person.getIdPerson());
+			biodataRepository.save(biodata);
+			statusDto.setStatus("true");
+			statusDto.setMessage("data berhasil masuk");
+			return statusDto;
+		} else if (dataDto.getNik().length()!=16 && Integer.parseInt(dlDto.getUmur()) >= 30) {
+			statusDto.setStatus("false");
+			statusDto.setMessage("data gagal masuk, jumlah digit nik tidak sama dengan 16");
+			return statusDto;
+		} else if (dataDto.getNik().length()==16 && Integer.parseInt(dlDto.getUmur()) < 30) {
+			statusDto.setStatus("false");
+			statusDto.setMessage("data gagal masuk, umur kurang dari 30 tahun");
+			return statusDto;
+		}
+		statusDto.setStatus("false");
+		statusDto.setMessage("data gagal masuk, jumlah digit nik tidak sama dengan 16 dan umur kurang dari 30 tahun");
+		return statusDto;
+	}
+	
+	@PostMapping("/editbio")
+	public StatusDto insertedit(@RequestBody DataDto dataDto) {
+		StatusDto statusDto = new StatusDto();
+		DataLengkapDto dlDto = new DataLengkapDto();
+		dataService.getAge(dlDto, dataDto);
+		if (dataDto.getNik().length()==16 && Integer.parseInt(dlDto.getUmur()) >= 30) {
+			Person person = convertToPerson2(dataDto);
+			personRepository.save(person);
+			Biodata biodata = convertToBiodata2(dataDto, person.getIdPerson());
 			biodataRepository.save(biodata);
 			statusDto.setStatus("true");
 			statusDto.setMessage("data berhasil masuk");
@@ -268,15 +295,37 @@ public class ApiBiodata {
 		return person;
 	}
 	
-	Integer i= 0;
-	public Biodata convertToBiodata(DataDto dataDto) {
+	public Person convertToPerson2(DataDto dataDto) {
+		Person person = new Person();
+		person.setIdPerson(dataDto.getId());
+		person.setNik(dataDto.getNik());
+		person.setNama(dataDto.getName());
+		person.setAlamat(dataDto.getAddress());
+		return person;
+	}
+	
+	public Biodata convertToBiodata(DataDto dataDto, Integer idPerson) {
 		Biodata biodata = new Biodata();
 		biodata.setNoHp(dataDto.getHp());
 		biodata.setTanggalLahir(dataDto.getTgl());
 		biodata.setTempatLahir(dataDto.getTempatLahir());
-		Person person = personRepository.findAll().get(this.i);
-		biodata.setPerson(person);
-		this.i+=1;
+		if (personRepository.findById(idPerson).isPresent()) {
+			Person person = personRepository.findById(idPerson).get();
+			biodata.setPerson(person);
+		}
+		return biodata;
+	}
+	
+	public Biodata convertToBiodata2(DataDto dataDto, Integer idPerson) {
+		Biodata biodata = new Biodata();
+		biodata.setIdBiodata(dataDto.getIdBio());
+		biodata.setNoHp(dataDto.getHp());
+		biodata.setTanggalLahir(dataDto.getTgl());
+		biodata.setTempatLahir(dataDto.getTempatLahir());
+		if (personRepository.findById(idPerson).isPresent()) {
+			Person person = personRepository.findById(idPerson).get();
+			biodata.setPerson(person);
+		}
 		return biodata;
 	}
 	
