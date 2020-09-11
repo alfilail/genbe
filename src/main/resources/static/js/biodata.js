@@ -17,27 +17,27 @@ var tableBiodata = {
                         data: res,
                         columns: [
                             {
-                                title: "NIK",
+                                title: "ID Number",
                                 data: "nik"
                             },
                             {
-                                title: "Nama",
+                                title: "Name",
                                 data: "name"
                             },
                             {
-                                title: "Alamat",
+                                title: "Address",
                                 data: "address"
                             },
                             {
-                                title: "No Hp",
+                                title: "Mobile",
                                 data: "hp"
                             },
                             {
-                                title: "Tanggal Lahir",
+                                title: "Birthdate",
                                 data: "tgl"
                             },
                             {
-                                title: "Tempat Lahir",
+                                title: "Birthplace",
                                 data: "tempatLahir"
                             },
                             {
@@ -105,26 +105,64 @@ var formBiodata = {
         $('#form-biodata')[0].reset();
     },
     saveForm: function () {
-        var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
-        $.ajax({
-            url: '/biodata',
-            method: 'post',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify(dataResult),
-            success: function (res, status, xhr) {
-                if (xhr.status == 200 || xhr.status == 201) {
-                    tableBiodata.create();
-                    $('#modal-biodata').modal('hide')
+        if ($('#form-biodata').parsley().validate()) {
+            var dataResult = getJsonForm($("#form-biodata").serializeArray(), true);
+            $.ajax({
+                url: '/biodata',
+                method: 'post',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(dataResult),
+                success: function (output) {
+                    if (output.status == "true") {
+                        tableBiodata.create();
+                        $('#modal-biodata').modal('hide')
+                        Swal.fire({
+                            position: 'center-middle',
+                            icon: 'success',
+                            title: 'Your data has been saved',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
+                    } else if (output.message == "data gagal masuk, jumlah digit nik tidak sama dengan 16") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Your ID Number must be 16 digits',
+                            footer: '<h6>Please input the correct format</h6>'
+                        })
+                    } else if (output.message == "data gagal masuk, umur kurang dari 30 tahun") {
+                        Swal.fire({
+                            title: 'Hi there..',
+                            text: 'Cute baby, you must be at least 30',
+                            imageUrl: 'https://static.boredpanda.com/blog/wp-content/uploads/2019/07/baby-portraits-teeth-added-coffee-creek-studio-amy-haehl-2-5d3e904f5e700__880.jpg',
+                            imageWidth: 500,
+                            imageHeight: 300,
+                            imageAlt: 'Smiling baby',
+                        })
+                    } else if (output.message == "data gagal masuk, jumlah digit nik tidak sama dengan 16 dan umur kurang dari 30 tahun") {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Wrong Format',
+                            text: 'ID Number must be 16 digits and make sure you are already 30'
+                        })
+                    } else if (output.message == "nik sudah ada") {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'For Your Information',
+                            text: 'ID Number "' + $('#nik').val() + '" already exists',
+                            footer: '<h6>Kindly check it out at the "Get the Data!" toolbar</h6>'
+                        })
+                    }
+                    else {
 
-                } else {
-
+                    }
+                },
+                erorrr: function (err) {
+                    console.log(err);
                 }
-            },
-            erorrr: function (err) {
-                console.log(err);
-            }
-        });
+            });
+        }
 
     },
     saveFormEdit: function () {
@@ -202,31 +240,31 @@ var formBiodata = {
                         data: [result[0].data],
                         columns: [
                             {
-                                title: "NIK",
+                                title: "ID Number",
                                 data: "nik"
                             },
                             {
-                                title: "Nama",
+                                title: "Name",
                                 data: "name"
                             },
                             {
-                                title: "Alamat",
+                                title: "Address",
                                 data: "address"
                             },
                             {
-                                title: "Nomor Hp",
+                                title: "Mobile",
                                 data: "hp"
                             },
                             {
-                                title: "Tanggal Lahir",
+                                title: "Birthdate",
                                 data: "tgl"
                             },
                             {
-                                title: "Tempat Lahir",
+                                title: "Birthplace",
                                 data: "tempatLahir"
                             },
                             {
-                                title: "Umur",
+                                title: "Age",
                                 data: "umur"
                             },
                             {
@@ -235,8 +273,19 @@ var formBiodata = {
                             }
                         ]
                     });
-                } else {
-
+                } else if (result[0].status == "true1") {
+                    Swal.fire(
+                        'Cannot be found',
+                        'ID Number "' + $('#nik').val() + '" does not exist',
+                        'warning'
+                    )
+                } else if (result[0].status == "false") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Your Request Cannot be Processed',
+                        footer: '<h6>ID Number must be 16 digits</h6>'
+                    })
                 }
             },
             error: function (err) {

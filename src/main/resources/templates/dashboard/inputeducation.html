@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html layout:decorate="~{base}"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{base}" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 
 <div class="row mb-2" layout:fragment="content-header">
     <div class="col-sm-6">
@@ -23,12 +21,12 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">List Biodata</h3>
-                <button class="float-right btn-primary" id="btn-tambah-biodata">Tambah</button>
+                <button class="float-right btn-primary" id="btn-tambah-biodata">Add</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive">
                 <table class="table table-striped table-bordered table-hover nowrap" id="tableBiodata"
-                       style="width:100%"></table>
+                    style="width:100%"></table>
             </div>
             <button class="btn btn-primary" id="submit" type="button">Submit</button>
 
@@ -53,10 +51,13 @@
 
                     </div>
                     <form id="form-biodata" role="form">
-                        <label for="idperson">Id Person</label> <input type="number"
-						class="form-control" id="idperson" placeholder="Enter Id Person">
                         <div class="form-group">
-                            <label>Jenjang Pendidikan</label>
+                            <label for="idperson">Id Person</label> <input type="number" class="form-control"
+                                id="idperson" placeholder="Enter Id Person">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Jenjang Pendidikan</label><br>
                             <select name="jenjang" id="jenjang">
                                 <option>SD</option>
                                 <option>SMP</option>
@@ -70,20 +71,20 @@
 
                         <div class="form-group">
                             <label>Institusi</label>
-                            <input class="form-control" id="institusi" name="institusi"
-                                   placeholder="Institusi" required type="text">
+                            <input class="form-control" id="institusi" name="institusi" placeholder="Institusi" required
+                                type="text">
                         </div>
 
                         <div class="form-group">
                             <label>Tahun Masuk</label>
-                            <input class="form-control" id="masuk" name="masuk"
-                                   placeholder="Tahun Masuk" required type="text">
+                            <input class="form-control" id="masuk" name="masuk" placeholder="Tahun Masuk" required
+                                type="text">
                         </div>
 
                         <div class="form-group">
                             <label>Tahun Lulus</label>
-                            <input class="form-control" id="lulus" name="lulus"
-                                   placeholder="Tahun Lulus" required type="text">
+                            <input class="form-control" id="lulus" name="lulus" placeholder="Tahun Lulus" required
+                                type="text">
                         </div>
                     </form>
                 </div>
@@ -116,7 +117,7 @@
         });
 
         $('#btn-save-biodata').click(function () {
-            if(newrow < 0) {
+            if (newrow < 0) {
                 formBiodata.saveFormPend($('#idperson').val());
             } else {
                 formBiodata.saveFormPendBaru($('#idperson').val());
@@ -124,11 +125,44 @@
         });
 
         $('#submit').click(function () {
-            formBiodata.submitPend($('#idperson').val());
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to edit the data once it submitted",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes!',
+                cancelButtonText: 'Wait!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'Submitted!',
+                        'Your data has been sent to our database.',
+                        'success'
+                    )
+                    formBiodata.submitPend($('#idperson').val());
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Okay',
+                        'Make sure the data is correct :)',
+                        'info'
+                    )
+                }
+            })
+            
         });
     </script>
 </th:block>
 
 </html>
-
-

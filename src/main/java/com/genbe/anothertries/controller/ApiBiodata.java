@@ -74,7 +74,7 @@ public class ApiBiodata {
 				statusdlDto.setData(dlDto);
 				object.add(statusdlDto);
 			} else {
-				statusDto.setStatus("true");
+				statusDto.setStatus("true1");
 				statusDto.setMessage("data dengan nik "+nik+" tidak ditemukan");
 				object.add(statusDto);
 			}
@@ -91,13 +91,18 @@ public class ApiBiodata {
 		StatusDto statusDto = new StatusDto();
 		DataLengkapDto dlDto = new DataLengkapDto();
 		dataService.getAge(dlDto, dataDto);
-		if (dataDto.getNik().length()==16 && Integer.parseInt(dlDto.getUmur()) >= 30) {
+		if (personRepository.findByNikLike(dataDto.getNik()).isEmpty() && 
+				dataDto.getNik().length()==16 && Integer.parseInt(dlDto.getUmur()) >= 30) {
 			Person person = convertToPerson(dataDto);
 			personRepository.save(person);
 			Biodata biodata = convertToBiodata(dataDto, person.getIdPerson());
 			biodataRepository.save(biodata);
 			statusDto.setStatus("true");
 			statusDto.setMessage("data berhasil masuk");
+			return statusDto;
+		} else if (personRepository.findByNikLike(dataDto.getNik()).isEmpty() == false) {
+			statusDto.setStatus("false");
+			statusDto.setMessage("nik sudah ada");
 			return statusDto;
 		} else if (dataDto.getNik().length()!=16 && Integer.parseInt(dlDto.getUmur()) >= 30) {
 			statusDto.setStatus("false");
@@ -107,7 +112,7 @@ public class ApiBiodata {
 			statusDto.setStatus("false");
 			statusDto.setMessage("data gagal masuk, umur kurang dari 30 tahun");
 			return statusDto;
-		}
+		} 
 		statusDto.setStatus("false");
 		statusDto.setMessage("data gagal masuk, jumlah digit nik tidak sama dengan 16 dan umur kurang dari 30 tahun");
 		return statusDto;

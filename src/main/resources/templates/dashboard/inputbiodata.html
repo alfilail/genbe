@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html layout:decorate="~{base}"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{base}" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 
 <div class="row mb-2" layout:fragment="content-header">
     <div class="col-sm-6">
@@ -23,12 +21,12 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">List Biodata</h3>
-                <button class="float-right btn-primary" id="btn-tambah-biodata">Tambah</button>
+                <button class="float-right btn-primary" id="btn-tambah-biodata">Add</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive">
                 <table class="table table-striped table-bordered table-hover nowrap" id="tableBiodata"
-                       style="width:100%"></table>
+                    style="width:100%"></table>
             </div>
             <!-- /.card-body -->
         </div>
@@ -51,43 +49,41 @@
 
                     </div>
                     <form id="form-biodata" role="form">
-                        <input name="id" id="id" type="hidden"/>
-                        <input name="idBio" id="idBio" type="hidden"/>
+                        <input name="id" id="id" type="hidden" />
+                        <input name="idBio" id="idBio" type="hidden" />
 
                         <div class="form-group">
-                            <label>NIK</label>
-                            <input class="form-control" id="nik" name="nik"
-                                   placeholder="NIK" required type="text">
+                            <label>ID Number</label>
+                            <input class="form-control" id="nik" name="nik" placeholder="ID Number" required
+                                type="text">
                         </div>
 
                         <div class="form-group">
                             <label>Name</label>
-                            <input class="form-control" id="name" name="name"
-                                   placeholder="Name" required type="text">
+                            <input class="form-control" id="name" name="name" placeholder="Name" required type="text">
                         </div>
 
                         <div class="form-group">
                             <label>Address</label>
-                            <input class="form-control" id="address" name="address"
-                                   placeholder="Address" required type="text">
+                            <input class="form-control" id="address" name="address" placeholder="Address" required
+                                type="text">
                         </div>
 
                         <div class="form-group">
                             <label>Mobile</label>
-                            <input class="form-control" id="hp" name="hp"
-                                   placeholder="Mobile" required type="text">
+                            <input class="form-control" id="hp" name="hp" placeholder="Mobile" required type="text">
                         </div>
 
                         <div class="form-group">
                             <label>Birthdate</label>
-                            <input class="form-control" id="tgl" name="tgl"
-                                   placeholder="Birthdate" required type="date">
+                            <input class="form-control" id="tgl" name="tgl" placeholder="Birthdate" required
+                                type="date">
                         </div>
 
                         <div class="form-group">
                             <label>Birthplace</label>
-                            <input class="form-control" id="tempatLahir" name="tempatLahir"
-                                   placeholder="Birthplace" required type="text">
+                            <input class="form-control" id="tempatLahir" name="tempatLahir" placeholder="Birthplace"
+                                required type="text">
                         </div>
                     </form>
                 </div>
@@ -122,8 +118,23 @@
         });
 
         $('#btn-save-biodata').click(function () {
-            if(editbio>0) {
-                formBiodata.saveFormEdit()
+            if (editbio > 0) {
+                Swal.fire({
+                    title: 'Do you want to save the changes?',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: `Save`,
+                    denyButtonText: `Don't save`,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        Swal.fire('Saved!', '', 'success')
+                        formBiodata.saveFormEdit()
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info')
+                        $('#modal-biodata').modal('hide')
+                    }
+                })
             } else {
                 formBiodata.saveForm()
             }
@@ -132,5 +143,3 @@
 </th:block>
 
 </html>
-
-
