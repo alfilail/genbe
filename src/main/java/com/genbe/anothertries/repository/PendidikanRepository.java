@@ -12,4 +12,7 @@ public interface PendidikanRepository extends JpaRepository<Pendidikan, Integer>
 	
 	@Query(value = "SELECT jenjang FROM public.t_pendidikan where idperson = ?1 order by tahunlulus desc limit 1", nativeQuery = true)
 	String pendidikanTerakhir(Integer idPerson);
+	
+	@Query(value = "SELECT * FROM public.t_pendidikan WHERE idperson = ?1", nativeQuery = true)
+	List<Pendidikan> getPendidikan(Integer idPerson);
 }

@@ -46,6 +46,13 @@ var tableBiodata = {
                                 render: function (data, type, row) {
                                     return "<button class='btn-primary' onclick=formBiodata.setEditData('" + data.id + "')>Edit</button>"
                                 }
+                            },
+                            {
+                                title: "Action",
+                                data: null,
+                                render: function (data, type, row) {
+                                    return "<button class='btn-primary' onclick=formBiodata.setDeleteData('" + data.id + "')>Delete</button>"
+                                }
                             }
                         ]
                     });
@@ -93,6 +100,13 @@ var tableBiodata = {
                     data: null,
                     render: function (data, type, full, meta) {
                         return "<button class='btn-primary' onclick=formBiodata.setEditDataPendidikan('" + meta.row + "')>Edit</button>"
+                    }
+                },
+                {
+                    title: "Action",
+                    data: null,
+                    render: function (data, type, full, meta) {
+                        return "<button class='btn-primary' onclick=formBiodata.setDeletePendidikan('" + meta.row + "')>Delete</button>"
                     }
                 }
             ]
@@ -222,6 +236,27 @@ var formBiodata = {
             }
         });
     },
+    setDeletePendidikan: function (row) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+                $('#tableBiodata').DataTable().row(row).remove().draw();
+                datapendidikan.splice(row, 1);
+            }
+        })
+    },
     getbynik: function (nik) {
         if ($.fn.DataTable.isDataTable('#tableBiodata')) {
             //table yg sudah dibentuk menjadi datatable harus d rebuild lagi untuk di instantiasi ulang
@@ -313,5 +348,32 @@ var formBiodata = {
                 console.log(err);
             }
         });
+    },
+    setDeleteData: function (id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/biodata/' + id,
+                    method: 'delete',
+                    contentType: 'application/json',
+                    dataType: 'json'
+                })
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+                tableBiodata.create();
+            }
+        })
+
     }
 };

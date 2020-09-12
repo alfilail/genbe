@@ -2,63 +2,67 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Biodata</title>
-	<!-- Font Awesome -->
-	<link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
-	<!-- overlayScrollbars -->
-	<link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
-	<!-- Ionicons -->
-	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-	<!-- DataTables -->
-	<link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.css}">
-	<!-- Select2 -->
-	<link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}">
-	<link rel="stylesheet" th:href="@{/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css}">
-	<link href="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-	<!-- Theme style -->
-	<link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
-	<!-- Google Font: Source Sans Pro -->
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-	<style>
-        input.parsley-success,
-        select.parsley-success,
-        textarea.parsley-success {
-            color: #468847;
-            background-color: #DFF0D8;
-            border: 1px solid #D6E9C6;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Enjoy your time!</title>
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+<!-- overlayScrollbars -->
+<link rel="stylesheet"
+	th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
+<!-- Ionicons -->
+<link rel="stylesheet"
+	href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<!-- DataTables -->
+<link rel="stylesheet"
+	th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.css}">
+<!-- Select2 -->
+<link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}">
+<link rel="stylesheet"
+	th:href="@{/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css}">
+<link
+	href="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker3.min.css"
+	rel="stylesheet">
+<!-- Theme style -->
+<link rel="stylesheet" th:href="@{/dist/css/adminlte.css}">
+<!-- Google Font: Source Sans Pro -->
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
+	rel="stylesheet">
+<style>
+input.parsley-success, select.parsley-success, textarea.parsley-success
+	{
+	color: #468847;
+	background-color: #DFF0D8;
+	border: 1px solid #D6E9C6;
+}
 
+input.parsley-error, select.parsley-error, textarea.parsley-error {
+	color: #B94A48;
+	background-color: #F2DEDE;
+	border: 1px solid #EED3D7;
+}
 
-        input.parsley-error,
-        select.parsley-error,
-        textarea.parsley-error {
-            color: #B94A48;
-            background-color: #F2DEDE;
-            border: 1px solid #EED3D7;
-        }
+.parsley-errors-list {
+	margin: 2px 0 3px;
+	padding: 0;
+	list-style-type: none;
+	font-size: 0.9em;
+	line-height: 0.9em;
+	opacity: 0;
+	color: #B94A48;
+	transition: all .3s ease-in;
+	-o-transition: all .3s ease-in;
+	-moz-transition: all .3s ease-in;
+	-webkit-transition: all .3s ease-in;
+}
 
-        .parsley-errors-list {
-            margin: 2px 0 3px;
-            padding: 0;
-            list-style-type: none;
-            font-size: 0.9em;
-            line-height: 0.9em;
-            opacity: 0;
-            color: #B94A48;
-
-            transition: all .3s ease-in;
-            -o-transition: all .3s ease-in;
-            -moz-transition: all .3s ease-in;
-            -webkit-transition: all .3s ease-in;
-        }
-
-        .parsley-errors-list.filled {
-            opacity: 1;
-        }
-    </style>
+.parsley-errors-list.filled {
+	opacity: 1;
+}
+</style>
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -73,20 +77,104 @@ to get the desired effect
 <body class="hold-transition sidebar-mini layout-fixed">
 	<div class="wrapper">
 
+		<!-- Navbar -->
+		<nav
+			class="main-header navbar navbar-expand navbar-white navbar-light">
+			<!-- Left navbar links -->
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link" data-widget="pushmenu"
+					href="#"><i class="fas fa-bars"></i></a></li>
+				<li class="nav-item d-none d-sm-inline-block"><a href="#"
+					class="nav-link">Home</a></li>
+				<li class="nav-item d-none d-sm-inline-block"><a href="#"
+					class="nav-link">Contact</a></li>
+			</ul>
+
+			<!-- Right navbar links -->
+			<ul class="navbar-nav ml-auto">
+				<!-- Messages Dropdown Menu -->
+				<a class="nav-link">Message from Alfi</a>
+				<li class="nav-item dropdown"><a class="nav-link"
+					data-toggle="dropdown" href="#"> <i class="far fa-comments"></i>
+						<span class="badge badge-danger navbar-badge">1</span>
+				</a>
+
+					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+						<a href="#" class="dropdown-item"> <!-- Message Start -->
+							<div class="media">
+								<img th:src="@{/dist/img/alfi 160160.jpg}" alt="User Avatar"
+									class="img-size-50 mr-3 img-circle">
+								<div class="media-body">
+									<h3 class="dropdown-item-title">
+										Me <span class="float-right text-sm text-danger"><i
+											class="fas fa-star"></i></span>
+									</h3>
+									<p class="text-sm">was born</p>
+									<p class="text-sm text-muted">
+										<i class="far fa-clock mr-1"></i> 22 years ago
+									</p>
+								</div>
+							</div> <!-- Message End -->
+						</a>
+						<div class="dropdown-divider"></div>
+						<a href="#" class="dropdown-item dropdown-footer">See All
+							My Journeys</a>
+					</div></li>
+				<!-- Notifications Dropdown Menu -->
+				<li class="nav-item dropdown"><a class="nav-link"
+					data-toggle="dropdown" href="#"> <i class="far fa-bell"></i> <span
+						class="badge badge-warning navbar-badge">15</span>
+				</a>
+					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+						<span class="dropdown-item dropdown-header">15
+							Notifications</span>
+						<div class="dropdown-divider"></div>
+						<a href="#" class="dropdown-item"> <i
+							class="fas fa-envelope mr-2"></i> 4 new messages <span
+							class="float-right text-muted text-sm">3 mins</span>
+						</a>
+						<div class="dropdown-divider"></div>
+						<a href="#" class="dropdown-item"> <i
+							class="fas fa-users mr-2"></i> 8 friend requests <span
+							class="float-right text-muted text-sm">12 hours</span>
+						</a>
+						<div class="dropdown-divider"></div>
+						<a href="#" class="dropdown-item"> <i class="fas fa-file mr-2"></i>
+							3 new reports <span class="float-right text-muted text-sm">2
+								days</span>
+						</a>
+						<div class="dropdown-divider"></div>
+						<a href="#" class="dropdown-item dropdown-footer">See All
+							Notifications</a>
+					</div></li>
+			</ul>
+		</nav>
+		<!-- /.navbar -->
 		<!-- Main Sidebar Container -->
 		<th:block layout:replace="~{fragment/sidebar}"></th:block>
 
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div layout:fragment="content-header" />
+				</div>
+			</div>
+			<!-- /.content-header -->
+
 			<!-- Main content -->
 			<div class="content">
 				<div class="container-fluid">
-					<div layout:fragment="content-body" /></div>
+					<div layout:fragment="content-body" />
 				</div>
 			</div>
 			<!-- /.content -->
 		</div>
 		<!-- /.content-wrapper -->
+
+		<!-- Main Footer -->
+		<th:block layout:replace="~{fragment/footer}"></th:block>
 
 		<!-- Control Sidebar -->
 		<aside class="control-sidebar control-sidebar-dark">
@@ -98,17 +186,21 @@ to get the desired effect
 	</div>
 	<!-- ./wrapper -->
 	<!-- jQuery -->
-    <script th:src="@{/plugins/jquery/jquery.min.js}"></script>
-    
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script th:src="@{/js/default.js}"></script>
 	<script th:src="@{/js/biodata.js}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.1/parsley.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.1/parsley.js"></script>
 	<!-- Bootstrap -->
 	<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
 	<!-- overlayScrollbars -->
-	<script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
-	<script src="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
+	<script
+		th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+	<script
+		src="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
 	<!-- Select2 -->
 	<script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>
 	<!-- DataTables -->
@@ -119,6 +211,7 @@ to get the desired effect
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<!-- AdminLTE -->
 	<script th:src="@{/dist/js/adminlte.js}"></script>
+	<script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 	<th:block layout:fragment="add-scripts">
 	</th:block>
 

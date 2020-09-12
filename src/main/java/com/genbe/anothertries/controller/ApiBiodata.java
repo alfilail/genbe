@@ -164,6 +164,16 @@ public class ApiBiodata {
 		return statusDto;
 	}
 	
+	@DeleteMapping("/{idPerson}")
+	public void delete(@PathVariable Integer idPerson) {
+		if (pendidikanRepository.findAllByPersonIdPerson(idPerson).isEmpty()==false) {
+			List<Pendidikan> pendidikan = pendidikanRepository.findAllByPersonIdPerson(idPerson).stream().collect(Collectors.toList());
+			pendidikanRepository.deleteAll(pendidikan);
+		}
+		biodataRepository.deleteById(idPerson);
+		personRepository.deleteById(idPerson);
+	}
+	
 	public DataDto convertToDataDto(Person person) {
 		DataDto dataDto = new DataDto();
 		dataDto.setId(person.getIdPerson());
